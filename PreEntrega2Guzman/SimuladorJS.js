@@ -1,55 +1,84 @@
 //Simulador JS para primera pre entrega del proyecto final JS CH
 
 
-let valorPlanStarter, valorPlanPremium
-let eligePlan = prompt("elige tu plan entre Starter o Premium").toLowerCase()
-let eligeMeses = prompt("elige cantidad de meses a cotizar")
-const valorIVA = 1.21
 
-if (eligeMeses >= 6 ) {
-    valorPlanStarter = 5000
-    valorPlanPremium = 12000
+class Planes {
     
-} else {
-    valorPlanStarter = 5200
-    valorPlanPremium = 12500
-}
-
-
-function elegirUnPlan(){
-    eligePlan   
-    return eligePlan
-    
-}
-
-function calcularValor(plan){
-    plan = eligePlan
-
-let textoMeses = "mes"
-
-for (let i = 0; i < eligeMeses; i++) {
-    if (i > 0) {
-        textoMeses = "meses"
+    constructor(nombre, valor) {
+      this.nombre = nombre;
+      this.valor = valor;
+      this.valorIVA = 1.21
     }
-    let numeroMes = i + 1
-    
   
-    if (plan == 'starter') {
-        let planConIva = (valorPlanStarter * numeroMes) * valorIVA
-        console.log("el valor final de tu plan para " + numeroMes + " " + textoMeses + " " + "de contratación es $ " + planConIva )
-    } 
-    else if (plan == 'premium') {
-        let planConIva = (valorPlanPremium * numeroMes) * valorIVA
-        console.log("el valor final de tu plan para " + numeroMes + " " + textoMeses + " " + "de contratación es $ " + planConIva )
+    mostrarDetalle() {
+      console.log(`Plan  ${this.nombre} precio final : $${this.calcularIVA()}`);
     }
-    else {
-        console.log('Nombre del plan inválido')
+
+    calcularIVA() {
+    let precioFinal = this.valor * this.valorIVA
+    this.valor = precioFinal
+    return precioFinal
+    }
+}
+  
+  const planStarter = new Planes("Starter", 5000);
+  planStarter.mostrarDetalle(); 
+
+  const planPremium = new Planes("Premium", 12000);
+  planPremium.mostrarDetalle(); 
+
+  const planBusiness = new Planes("Business", 23000);
+  planBusiness.mostrarDetalle(); 
+
+  const planCorporate = new Planes("Corporate", 47000);
+  planCorporate.mostrarDetalle(); 
+
+  let listaDePlanes = [planStarter, planPremium, planBusiness, planCorporate]
+
+let opcionesDePlan = ""
+listaDePlanes.forEach(element => {
+    opcionesDePlan += ` ${element.nombre},`
+});
+
+
+let existePlan = false
+let eligePlan = ""
+
+while (!existePlan) {
+    eligePlan = prompt(`elige tu plan entre ${opcionesDePlan.slice(0, -1)} ` ).toLowerCase()
+    listaDePlanes.forEach(element => {
+        if (eligePlan == element.nombre.toLowerCase()) {
+            existePlan = true
+        }
+        
+    });
+    
+}
+
+let eligeMeses = prompt("elige cantidad de meses a cotizar")
+
+function mostrarValorFinal(){
+    if (eligeMeses >= 6 ) {
+        listaDePlanes.forEach(element => {
+            if (eligePlan == element.nombre.toLowerCase()) {
+                element.valor -= 2000 
+                console.log(`El precio final de tu plan con descuento es $${element.valor}`)
+            }
+       });
         
     }
-    
+    else {
+        listaDePlanes.forEach(element => {
+            if (eligePlan == element.nombre.toLowerCase()) {
+                console.log(`El precio final de tu plan es $${element.valor}`)
+            }
+       });
+    }  
 }
 
-}
+mostrarValorFinal()
 
-elegirUnPlan()
-calcularValor()
+
+
+
+
